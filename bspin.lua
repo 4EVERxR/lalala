@@ -1,1 +1,54 @@
-local v0=game:GetService("Players");local v1=game:GetService("RunService");local v2=game:GetService("TeleportService");local v3=game:GetService("Lighting");local v4=v0.LocalPlayer;local v5=v4.Character or v4.CharacterAdded:Wait() ;local v6=v5:WaitForChild("HumanoidRootPart");local v7=0 -0 ;local v8=14 + 46 ;local v9=v6.Position;for v18,v19 in pairs(workspace:GetDescendants()) do if (v19:IsA("Part") or v19:IsA("UnionOperation") or v19:IsA("MeshPart")) then local v28=957 -(892 + 65) ;while true do if (v28==(0 -0)) then v19.Material=Enum.Material.SmoothPlastic;v19.Reflectance=568 -(367 + 201) ;break;end end elseif (v19:IsA("Decal") or v19:IsA("Texture")) then v19.Transparency=1 -0 ;elseif (v19:IsA("ParticleEmitter") or v19:IsA("Trail")) then v19.Enabled=false;elseif v19:IsA("SurfaceAppearance") then v19:Destroy();end end settings().Rendering.QualityLevel=Enum.QualityLevel.Level01;workspace.FallenPartsDestroyHeight= -(917 -417);if workspace:FindFirstChild("Terrain") then workspace.Terrain.WaterWaveSize=927 -(214 + 713) ;workspace.Terrain.WaterWaveSpeed=180 -(67 + 113) ;workspace.Terrain.WaterReflectance=0 + 0 ;workspace.Terrain.WaterTransparency=1 + 0 ;end v3.GlobalShadows=false;v3.FogEnd=8853710519 -  -146288969 ;v3.Brightness=1637 -(1523 + 114) ;local function v16(v20) if v20 then for v30,v31 in pairs(v20:GetDescendants()) do if v31:IsA("BasePart") then v31.Transparency=1 + 0 ;elseif (v31:IsA("Decal") or v31:IsA("Texture")) then v31:Destroy();end end end end local v17=workspace:FindFirstChild("Map");if v17 then local v26=0;local v27;while true do if (v26==(2 -0)) then if v27 then for v39,v40 in pairs(v27:GetChildren()) do if (v40.Name~="ATMs") then v16(v40);end end end break;end if (v26==(1066 -(68 + 997))) then v16(v17:FindFirstChild("RoadNetwork"));v27=v17:FindFirstChild("Props");v26=1272 -(226 + 1044) ;end if (v26==(0 -0)) then v16(v17:FindFirstChild("Tiles"));v16(v17:FindFirstChild("Vegetation"));v26=118 -(32 + 85) ;end end end v1.Heartbeat:Connect(function(v21) if ((v6.Position-v9).magnitude<(0.1 + 0)) then v7=v7 + v21 ;if (v7>=v8) then v2:Teleport(game.PlaceId,v4);end else local v29=997 -(915 + 82) ;while true do if (v29==(0 + 0)) then v7=0;v9=v6.Position;break;end end end end);
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
+        v.Material = Enum.Material.SmoothPlastic
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Enabled = false
+    elseif v:IsA("SurfaceAppearance") then
+        v:Destroy()
+    end
+end
+
+settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+workspace.FallenPartsDestroyHeight = -500
+if workspace:FindFirstChild("Terrain") then
+    workspace.Terrain.WaterWaveSize = 0
+    workspace.Terrain.WaterWaveSpeed = 0
+    workspace.Terrain.WaterReflectance = 0
+    workspace.Terrain.WaterTransparency = 1
+end
+
+local lighting = game:GetService("Lighting")
+lighting.GlobalShadows = false
+lighting.FogEnd = 9e9
+lighting.Brightness = 0
+
+local function hideFolder(folder)
+    if folder then
+        for _, v in pairs(folder:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.Transparency = 1
+            elseif v:IsA("Decal") or v:IsA("Texture") then
+                v:Destroy()
+            end
+        end
+    end
+end
+
+local map = workspace:FindFirstChild("Map")
+if map then
+    hideFolder(map:FindFirstChild("Tiles"))
+    hideFolder(map:FindFirstChild("Vegetation"))
+    hideFolder(map:FindFirstChild("RoadNetwork"))
+
+    local props = map:FindFirstChild("Props")
+    if props then
+        for _, obj in pairs(props:GetChildren()) do
+            if obj.Name ~= "ATMs" then
+                hideFolder(obj)
+            end
+        end
+    end
+end
