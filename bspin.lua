@@ -65,7 +65,7 @@ end
 
 while true do
     task.wait(2)
-    if tick() - lastFrame > 2 then
+    if tick() - lastFrame > 30 then
         TeleportService:Teleport(game.PlaceId, player)
     end
 end
