@@ -4,11 +4,12 @@ local TeleportService = game:GetService("TeleportService")
 local lighting = game:GetService("Lighting")
 
 local player = Players.LocalPlayer
-local lastFrame = tick()
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
 
-RunService.RenderStepped:Connect(function()
-    lastFrame = tick()
-end)
+local afkTime = 0
+local maxAfk = 60
+local lastPosition = hrp.Position
 
 for _, v in pairs(workspace:GetDescendants()) do
     if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
@@ -53,6 +54,7 @@ if map then
     hideFolder(map:FindFirstChild("Tiles"))
     hideFolder(map:FindFirstChild("Vegetation"))
     hideFolder(map:FindFirstChild("RoadNetwork"))
+
     local props = map:FindFirstChild("Props")
     if props then
         for _, obj in pairs(props:GetChildren()) do
@@ -63,9 +65,14 @@ if map then
     end
 end
 
-while true do
-    task.wait(2)
-    if tick() - lastFrame > 15 then
-        TeleportService:Teleport(game.PlaceId, player)
+RunService.Heartbeat:Connect(function(delta)
+    if (hrp.Position - lastPosition).magnitude < 0.1 then
+        afkTime = afkTime + delta
+        if afkTime >= maxAfk then
+            TeleportService:Teleport(game.PlaceId, player)
+        end
+    else
+        afkTime = 0
+        lastPosition = hrp.Position
     end
-end
+end)
